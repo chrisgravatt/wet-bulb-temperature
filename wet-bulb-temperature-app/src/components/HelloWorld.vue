@@ -7,6 +7,7 @@ export default {
       items: [],
       citiesAndLatLon: [],
       selectedCity: '',
+      wetBulbTemp: null,
     };
   },
   methods: {
@@ -83,8 +84,8 @@ export default {
         console.log(`Temperature: ${temp_f}°F`);
         console.log(`Humidity: ${humidity}%`);
         // the big kahuna!!
-        const wetBulbTemp = this.getWetBulbTemp(temp_f, humidity)
-        console.log(`the wet bulb temp is ${wetBulbTemp}`)
+        this.wetBulbTemp = this.getWetBulbTemp(temp_f, humidity)
+        console.log(`the wet bulb temp is ${this.wetBulbTemp}`)
       })
       .catch(error => {
         console.error(error);
@@ -123,7 +124,7 @@ export default {
       } while (true);
       
       // Convert wet bulb temperature from Celsius to Fahrenheit
-      return (twcNew * 9 / 5) + 32;
+      return Math.round((twcNew * 9 / 5) + 32);
     }
   },
 };
@@ -138,6 +139,15 @@ export default {
       <h1 class="text-h2 font-weight-bold">Location</h1>
 
       <div class="py-14" />
+
+      <!-- New component for displaying wet bulb temperature -->
+      <v-card class="mb-3">
+        <v-card-title>
+          Wet Bulb Temperature:
+          <span class="font-weight-bold">{{ wetBulbTemp }}</span> °F
+        </v-card-title>
+      </v-card>
+
       <v-row class="d-flex align-center justify-center autocomplete-container">
         <v-autocomplete
           class="my-autocomplete"
