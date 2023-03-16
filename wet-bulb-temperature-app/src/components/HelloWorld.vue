@@ -69,7 +69,23 @@ export default {
       console.log(`Longitude: ${lon}`);
 
       // Use the lat/lon to make another API call to a weather API here
-      // ...
+      const API_KEY = '263099b102ec4a5bb11191701231603';
+      const API_URL = 'https://api.weatherapi.com/v1/current.json';
+
+      axios.get(API_URL, {
+        params: {
+          key: API_KEY,
+          q: `${lat},${lon}`,
+        },
+      })
+      .then(response => {
+        const { temp_f, humidity } = response.data.current;
+        console.log(`Temperature: ${temp_f}°F`);
+        console.log(`Humidity: ${humidity}%`);
+      })
+      .catch(error => {
+        console.error(error);
+      });
     }
   },
 };
