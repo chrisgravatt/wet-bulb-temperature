@@ -5,6 +5,7 @@ export default {
   data() {
     return {
       items: [],
+      citiesAndLatLon: [],
       selectedCity: '',
     };
   },
@@ -24,16 +25,21 @@ export default {
         .then(response => {
           // Extract the city names from the API response
           console.log(response.data);
-          const cities = response.data.features.map(feature => {
-            const { formatted } = feature.properties;
-            return `${formatted}`;
+          const citiesAndLatLon = response.data.features.map(feature => {
+            const { formatted, lat, lon } = feature.properties;
+            return {
+              formattedCity: formatted,
+              lat: lat,
+              lon: lon
+            };
           }).filter(Boolean);
-          // TODO figure out how to return the formatted city
-          // TODO but then also save the lat/lon in the data, but not display it
-          // TODO and then search for it in onCitySelect
+
+          // Save the city names and lat/lon to this.citiesAndLatLon
+          this.citiesAndLatLon = citiesAndLatLon;
 
           // Set the city names as the autocomplete items
-          this.items = cities;
+          this.items = citiesAndLatLon.map(city => city.formattedCity);
+          console.log(`the items are ${this.items}`)
         })
         .catch(error => {
           console.error(error);
@@ -47,22 +53,23 @@ export default {
       const selectedCityName = this.selectedCity;
       console.log(`Selected city: ${selectedCityName}`);
 
-      // Find the feature object in the API response that matches the selected city
-      const selectedCityFeature = this.items.find(feature => {
-        const { city, state } = feature.properties;
-        return `${city}, ${state}` === selectedCityName;
-      });
+      // Find the city object in citiesAndLatLon that matches the selected city name
+      const selectedCity = this.citiesAndLatLon.find(city => city.formattedCity === selectedCityName);
 
-      if (!selectedCityFeature) {
-        console.error(`Could not find feature for ${selectedCityName}`);
+      if (!selectedCity) {
+        console.error(`Could not find lat/lon for ${selectedCityName}`);
         return;
       }
 
-      // Extract the properties from the selected city feature
-      const { city, state, lat, lon } = selectedCityFeature.properties;
-      console.log(`Selected city: ${city}, ${state}`);
+      // Extract the lat and lon from the selected city object
+      const { lat, lon } = selectedCity;
+
+      console.log(`Selected city: ${selectedCityName}`);
       console.log(`Latitude: ${lat}`);
       console.log(`Longitude: ${lon}`);
+
+      // Use the lat/lon to make another API call to a weather API here
+      // ...
     }
   },
 };
@@ -83,6 +90,7 @@ export default {
           clearable
           label=" Location"
           :items="items"
+          item-text="formatted" 
           @input="searchCities"
           no-data-text=""
           v-model="selectedCity"
