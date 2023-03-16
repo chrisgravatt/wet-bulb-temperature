@@ -5,38 +5,65 @@ export default {
   data() {
     return {
       items: [],
+      selectedCity: '',
     };
   },
   methods: {
     searchCities(event) {
-      const query = event.target.value;
+      const query = event.target.value.replace(/\s+/g, ''); // remove spaces
       console.log(`Searching for ${query}...`);
       axios
         .get('https://api.geoapify.com/v1/geocode/autocomplete', {
           params: {
             text: query,
             apiKey: '4e00f90907e84583b46a589565b8cb5c',
-            type: 'city', // Limit results to cities
-            limit: 5, // Limit to 5 results
+            type: 'city', 
+            limit: 5, 
           },
         })
         .then(response => {
           // Extract the city names from the API response
-          console.log('this is the response data:')
           console.log(response.data);
           const cities = response.data.features.map(feature => {
-            const { city, state } = feature.properties;
-            return `${city}, ${state}`;
+            const { formatted } = feature.properties;
+            return `${formatted}`;
           }).filter(Boolean);
+          // TODO figure out how to return the formatted city
+          // TODO but then also save the lat/lon in the data, but not display it
+          // TODO and then search for it in onCitySelect
 
           // Set the city names as the autocomplete items
           this.items = cities;
-          console.log(`these are the cities: ${cities}`)
         })
         .catch(error => {
           console.error(error);
         });
     },
+    onCitySelect() {
+      if (!this.selectedCity) {
+        return;
+      }
+
+      const selectedCityName = this.selectedCity;
+      console.log(`Selected city: ${selectedCityName}`);
+
+      // Find the feature object in the API response that matches the selected city
+      const selectedCityFeature = this.items.find(feature => {
+        const { city, state } = feature.properties;
+        return `${city}, ${state}` === selectedCityName;
+      });
+
+      if (!selectedCityFeature) {
+        console.error(`Could not find feature for ${selectedCityName}`);
+        return;
+      }
+
+      // Extract the properties from the selected city feature
+      const { city, state, lat, lon } = selectedCityFeature.properties;
+      console.log(`Selected city: ${city}, ${state}`);
+      console.log(`Latitude: ${lat}`);
+      console.log(`Longitude: ${lon}`);
+    }
   },
 };
 </script>
@@ -54,15 +81,14 @@ export default {
         <v-autocomplete
           class="my-autocomplete"
           clearable
-          label="Location"
+          label=" Location"
           :items="items"
           @input="searchCities"
           no-data-text=""
-          item-value="city"
-          item-text="display_name"
           v-model="selectedCity"
+          @change="onCitySelect"
+          no-filter
         ></v-autocomplete>
-
       </v-row>
     </v-responsive>
   </v-container>
