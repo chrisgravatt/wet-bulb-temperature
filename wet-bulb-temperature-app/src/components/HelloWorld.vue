@@ -134,18 +134,13 @@ export default {
   <v-container class="fill-height">
     <v-responsive class="d-flex align-center text-center justify-center fill-height">
 
-      <!-- <div class="text-body-2 font-weight-bold mb-1">What's the</div>
+      <!-- Display wetBulbTemp as text only -->
+      <div v-if="wetBulbTemp" class="d-flex align-center mb-15 justify-center">
+        <div class="font-weight-bold text-h1">{{ wetBulbTemp }}</div>
+        <div class="font-weight-bold text-h1">&deg;F</div>
+      </div>
 
-      <h1 class="text-h2 font-weight-bold">Wet bulb temp</h1> -->
-
-      <div class="py-10"></div>
-
-      <!-- New component for displaying wet bulb temperature -->
-      <v-card class="d-flex align-center mb-15 justify-center bg-primaryvariant elevation-3 wet-bulb-card">
-        <v-card-title>
-          <span class="font-weight-bold text-h1">{{ wetBulbTemp }}</span>°F
-        </v-card-title>
-      </v-card>
+      <div class="text-body-12 font-weight-bold mb-8">Enter your location</div>
 
       <v-row class="d-flex align-center justify-center">
         <v-autocomplete
