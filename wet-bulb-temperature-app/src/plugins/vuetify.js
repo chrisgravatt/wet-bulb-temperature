@@ -10,6 +10,7 @@ import 'vuetify/styles'
 
 // Composables
 import { createVuetify } from 'vuetify'
+import { withDirectives } from 'vue'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -18,16 +19,17 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          primary: '#FADFB2',
-          secondary: '#CEED9D',
-          primaryvariant: '#F8CB7E',
+          primary: '#EBA85B',
+          secondary: '#8fd75a',
+          primaryvariant: '#f2ab2a',
           error: '#8B0000',
           info: '#008B8B',
           success: '#228B22',
           warning: '#FF8C00',
-          background: '#FADFB2',
+          background: '#EBA85B',
           surface: '',
         },
+        textColor: 'white',
       },
     },
   },

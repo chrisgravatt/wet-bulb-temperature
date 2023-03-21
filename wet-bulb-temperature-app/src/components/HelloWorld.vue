@@ -136,17 +136,17 @@ export default {
 
       <!-- Display wetBulbTemp as text only -->
       <div v-if="wetBulbTemp" class="d-flex align-center mb-15 justify-center">
-        <div class="font-weight-bold text-h1">{{ wetBulbTemp }}</div>
-        <div class="font-weight-bold text-h1">&deg;F</div>
+        <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTemp }}</div>
+        <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
       </div>
 
-      <div class="text-body-12 font-weight-bold mb-8">Enter your location</div>
+      <div class="text-h5 font-weight-bold mb-8" style="color: white">Enter your location</div>
 
       <v-row class="d-flex align-center justify-center">
         <v-autocomplete
           class="my-autocomplete"
           clearable
-          label=" Location"
+          label="Location"
           :items="items"
           item-text="formatted" 
           @input="searchCities"
@@ -154,6 +154,7 @@ export default {
           v-model="selectedCity"
           @change="onCitySelect"
           no-filter
+          :menu-props="auto"
         ></v-autocomplete>
       </v-row>
     </v-responsive>
@@ -162,12 +163,24 @@ export default {
 
 <style>
   .my-autocomplete {
-    max-width: 600px;
+    max-width: 340px;
     justify-content: center;
   }
-  .wet-bulb-card {
-    max-width: 200px;
-    justify-content: center;
-    margin: 0 auto;
+
+  .v-list {
+    background-color: rgb(234, 159, 74) !important;
   }
+
+  .v-list-item {
+    color: white !important;
+  }
+
+  .v-autocomplete {
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 20px;
+    color: white;
+  }
+
 </style>
