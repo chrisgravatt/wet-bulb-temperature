@@ -10,6 +10,19 @@ export default {
       wetBulbTemp: null,
     };
   },
+  computed: {
+    bgColor() {
+      if (this.wetBulbTemp < 70) {
+        return 'linear-gradient(to bottom, #00bfff 69%, #fcff9f)';
+      } else if (this.wetBulbTemp >= 70 && this.wetBulbTemp < 85) {
+        return 'linear-gradient(to bottom, #00ff00 69%, #fcff9f)';
+      } else if (this.wetBulbTemp >= 85 && this.wetBulbTemp < 98) {
+        return 'linear-gradient(to bottom, #ff8c00 69%, #fcff9f)';
+      } else {
+        return 'linear-gradient(to bottom, #ff0000 69%, #fcff9f)';
+      }
+    }
+  },
   methods: {
     searchCities(event) {
       const query = event.target.value.replace(/\s+/g, ''); // remove spaces
@@ -131,34 +144,47 @@ export default {
 </script>
 
 <template>
-  <v-container class="fill-height">
-    <v-responsive class="d-flex align-center text-center justify-center fill-height">
+  <v-app :style="{ background: bgColor }">
+    <v-container class="fill-height">
+      <v-responsive class="d-flex align-center text-center justify-center fill-height">
 
-      <!-- Display wetBulbTemp as text only -->
-      <div v-if="wetBulbTemp" class="d-flex align-center mb-15 justify-center">
-        <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTemp }}</div>
-        <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
-      </div>
+        <!-- Display wetBulbTemp as text only -->
+        <div v-if="wetBulbTemp" class="d-flex align-center mb-15 justify-center">
+          <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTemp }}</div>
+          <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
+        </div>
+        
+        <!-- Text that says "Enter your location" -->
+        <div class="text-h5 font-weight-bold mb-8" style="color: white">Enter your location</div>
 
-      <div class="text-h5 font-weight-bold mb-8" style="color: white">Enter your location</div>
+        <!-- Autocomplete text box -->
+        <v-row class="d-flex align-center justify-center">
+          <v-autocomplete
+            class="my-autocomplete"
+            clearable
+            label="Location"
+            :items="items"
+            item-text="formatted" 
+            @input="searchCities"
+            no-data-text=""
+            v-model="selectedCity"
+            @change="onCitySelect"
+            no-filter
+            :menu-props="auto"
+          ></v-autocomplete>
+        </v-row>
 
-      <v-row class="d-flex align-center justify-center">
-        <v-autocomplete
-          class="my-autocomplete"
-          clearable
-          label="Location"
-          :items="items"
-          item-text="formatted" 
-          @input="searchCities"
-          no-data-text=""
-          v-model="selectedCity"
-          @change="onCitySelect"
-          no-filter
-          :menu-props="auto"
-        ></v-autocomplete>
-      </v-row>
-    </v-responsive>
-  </v-container>
+        <!-- Blurb about what the wet bulb temperature means -->
+        <div v-if="wetBulbTemp" class="d-flex align-center mt-15 justify-center" style="color: white">
+          {{ wetBulbTemp < 70 ? 'There is no risk of heat stress at this temperature' : '' }}
+          {{ wetBulbTemp >= 70 && wetBulbTemp < 85 ? 'The wet bulb temperature is at a comfortable level' : '' }}
+          {{ wetBulbTemp >= 85 && wetBulbTemp < 98 ? 'There is a high risk of heat stress at this temperature' : '' }}
+          {{ wetBulbTemp >= 98 ? 'At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately' : '' }}
+        </div>
+
+      </v-responsive>
+    </v-container>
+  </v-app>
 </template>
 
 <style>
@@ -168,7 +194,7 @@ export default {
   }
 
   .v-list {
-    background-color: rgb(234, 159, 74) !important;
+    background-color: #ff9f69 !important;
   }
 
   .v-list-item {

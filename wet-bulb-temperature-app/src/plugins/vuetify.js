@@ -20,13 +20,13 @@ export default createVuetify({
       light: {
         colors: {
           primary: '#EBA85B',
-          secondary: '#8fd75a',
+          secondary: '#49416D',
           primaryvariant: '#f2ab2a',
           error: '#8B0000',
           info: '#008B8B',
           success: '#228B22',
           warning: '#FF8C00',
-          background: '#EBA85B',
+          // background: '#EBA85B',
           surface: '',
         },
         textColor: 'white',
