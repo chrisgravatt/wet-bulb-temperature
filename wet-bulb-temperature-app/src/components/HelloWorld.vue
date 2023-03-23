@@ -1,4 +1,5 @@
 <script>
+import { LOW_TEMP_BOUNDARY, MEDIUM_TEMP_BOUNDARY, HIGH_TEMP_BOUNDARY } from '@/constants';
 import axios from 'axios';
 
 export default {
@@ -8,15 +9,19 @@ export default {
       citiesAndLatLon: [],
       selectedCity: '',
       wetBulbTemp: null,
+      lowTempBoumdary: LOW_TEMP_BOUNDARY,
+      mediumTempBoundary: MEDIUM_TEMP_BOUNDARY,
+      highTempBoumdary: HIGH_TEMP_BOUNDARY,
     };
   },
   computed: {
+    // change the background color based on the hazard level of the wet bulb temperature
     bgColor() {
-      if (this.wetBulbTemp < 70) {
+      if (this.wetBulbTemp < LOW_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #00bfff 69%, #fcff9f)';
-      } else if (this.wetBulbTemp >= 70 && this.wetBulbTemp < 85) {
-        return 'linear-gradient(to bottom, #00ff00 69%, #fcff9f)';
-      } else if (this.wetBulbTemp >= 85 && this.wetBulbTemp < 98) {
+      } else if (this.wetBulbTemp >= LOW_TEMP_BOUNDARY && this.wetBulbTemp < MEDIUM_TEMP_BOUNDARY) {
+        return 'linear-gradient(to bottom, #1BE21B 69%, #fcff9f)';
+      } else if (this.wetBulbTemp >= MEDIUM_TEMP_BOUNDARY && this.wetBulbTemp < HIGH_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #ff8c00 69%, #fcff9f)';
       } else {
         return 'linear-gradient(to bottom, #ff0000 69%, #fcff9f)';
@@ -149,20 +154,36 @@ export default {
       <v-responsive class="d-flex align-center text-center justify-center fill-height">
 
         <!-- Display wetBulbTemp as text only -->
-        <div v-if="wetBulbTemp" class="d-flex align-center mb-15 justify-center">
+        <div v-if="wetBulbTemp" class="d-flex align-center mb-8 justify-center">
           <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTemp }}</div>
           <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
         </div>
-        
-        <!-- Text that says "Enter your location" -->
-        <div class="text-h5 font-weight-bold mb-8" style="color: white">Enter your location</div>
+
+        <!-- Blurb about what the wet bulb temperature means -->
+        <div v-if="wetBulbTemp" class="d-flex text-h6 align-center mb-12 justify-center" style="color: white">
+          <template v-if="wetBulbTemp < lowTempBoumdary">
+            There is no risk of heat stress at this temperature
+          </template>
+          <template v-else-if="wetBulbTemp >= lowTempBoumdary && wetBulbTemp < mediumTempBoundary">
+            The wet bulb temperature is at a comfortable level
+          </template>
+          <template v-else-if="wetBulbTemp >= mediumTempBoundary && wetBulbTemp < highTempBoumdary">
+            There is a high risk of heat stress at this temperature
+          </template>
+          <template v-else-if="wetBulbTemp >= highTempBoumdary">
+            At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately
+          </template>
+          <template v-else>
+            No text
+          </template>
+        </div>
 
         <!-- Autocomplete text box -->
         <v-row class="d-flex align-center justify-center">
           <v-autocomplete
             class="my-autocomplete"
             clearable
-            label="Location"
+            label="Enter your location"
             :items="items"
             item-text="formatted" 
             @input="searchCities"
@@ -173,14 +194,6 @@ export default {
             :menu-props="auto"
           ></v-autocomplete>
         </v-row>
-
-        <!-- Blurb about what the wet bulb temperature means -->
-        <div v-if="wetBulbTemp" class="d-flex align-center mt-15 justify-center" style="color: white">
-          {{ wetBulbTemp < 70 ? 'There is no risk of heat stress at this temperature' : '' }}
-          {{ wetBulbTemp >= 70 && wetBulbTemp < 85 ? 'The wet bulb temperature is at a comfortable level' : '' }}
-          {{ wetBulbTemp >= 85 && wetBulbTemp < 98 ? 'There is a high risk of heat stress at this temperature' : '' }}
-          {{ wetBulbTemp >= 98 ? 'At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately' : '' }}
-        </div>
 
       </v-responsive>
     </v-container>
