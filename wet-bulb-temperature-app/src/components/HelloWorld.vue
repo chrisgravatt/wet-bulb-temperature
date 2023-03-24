@@ -141,7 +141,7 @@ export default {
         iterationCount++;
       } while (true);
       
-      // Convert wet bulb temperature from Celsius to Fahrenheit
+      // Convert wet bulb temperature from Celsius to Fahrenheit.
       return Math.round((twcNew * 9 / 5) + 32);
     }
   },
