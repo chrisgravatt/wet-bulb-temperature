@@ -20,3 +20,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WET_BULB_TEMP }}'
           projectId: wet-bulb-temp
+          entryPoint: 'wet-bulb-temperature-app/firebase.json'
