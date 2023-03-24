@@ -11,7 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm run build
+      - name: Install dependencies
+        working-directory: ./wet-bulb-temperature-app
+        run: npm install
+      - name: Build
+        run: npm run build
         working-directory: ./wet-bulb-temperature-app
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -19,3 +23,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WET_BULB_TEMP }}'
           channelId: live
           projectId: wet-bulb-temp
+          entryPoint: 'wet-bulb-temperature-app'
