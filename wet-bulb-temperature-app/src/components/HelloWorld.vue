@@ -189,9 +189,11 @@ export default {
             @input="searchCities"
             no-data-text=""
             v-model="selectedCity"
-            @change="onCitySelect"
+            @click:option="onCitySelect"
+            @update:model-value="onCitySelect"
             no-filter
             :menu-props="auto"
+            close-on-click
           ></v-autocomplete>
         </v-row>
 
