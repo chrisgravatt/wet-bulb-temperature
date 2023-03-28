@@ -1,3 +1,3 @@
-export const LOW_TEMP_BOUNDARY = 29;
-export const MEDIUM_TEMP_BOUNDARY = 36;
-export const HIGH_TEMP_BOUNDARY = 41;
+export const LOW_TEMP_BOUNDARY = 50;
+export const MEDIUM_TEMP_BOUNDARY = 85;
+export const HIGH_TEMP_BOUNDARY = 95;
