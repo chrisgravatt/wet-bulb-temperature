@@ -27,7 +27,6 @@ export default createVuetify({
           success: '#228B22',
           warning: '#FF8C00',
           // background: '#EBA85B',
-          surface: '',
         },
         textColor: 'white',
       },
