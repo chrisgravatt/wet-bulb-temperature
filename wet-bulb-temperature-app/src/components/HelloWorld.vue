@@ -20,7 +20,7 @@ export default {
       if (this.wetBulbTemp < LOW_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #00bfff 69%, #fcff9f)';
       } else if (this.wetBulbTemp >= LOW_TEMP_BOUNDARY && this.wetBulbTemp < MEDIUM_TEMP_BOUNDARY) {
-        return 'linear-gradient(to bottom, #1BE21B 69%, #fcff9f)';
+        return 'linear-gradient(to bottom, #14cc14 69%, #fcff9f)';
       } else if (this.wetBulbTemp >= MEDIUM_TEMP_BOUNDARY && this.wetBulbTemp < HIGH_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #ff8c00 69%, #fcff9f)';
       } else {
@@ -183,17 +183,18 @@ export default {
           <v-autocomplete
             class="my-autocomplete"
             clearable
-            label="Enter your location"
+            label=""
+            placeholder="Enter your location"
             :items="items"
-            item-text="formatted" 
+            item-text="formatted"
             @input="searchCities"
             no-data-text=""
             v-model="selectedCity"
             @click:option="onCitySelect"
             @update:model-value="onCitySelect"
             no-filter
-            :menu-props="auto"
             close-on-click
+            autofocus
           ></v-autocomplete>
         </v-row>
 
@@ -209,7 +210,10 @@ export default {
   }
 
   .v-list {
-    background-color: #ff9f69 !important;
+    backdrop-filter: blur(20px) !important;
+    background-color: rgba(37, 37, 37, 0.2) !important;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.25) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
   }
 
   .v-list-item {
@@ -217,10 +221,10 @@ export default {
   }
 
   .v-autocomplete {
-    border-color: white;
+    /* border-color: white;
     border-style: solid;
     border-width: 2px;
-    border-radius: 20px;
+    border-radius: 20px; */
     color: white;
   }
 
