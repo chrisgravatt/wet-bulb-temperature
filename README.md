@@ -12,10 +12,10 @@ TODO:
 
 Future Features List:
 
-- Celsius support/toggle
-- Toggle/selection of guidlines from various organizations
+- Toggle/selection of guidlines from various organizations 
 - About page that has info about the accuracy of the temp, Stull formula, etc. Links to official org guidlines
 - Hide banner text on smaller mobile screens
 - Make banner thinner (possibly on mobile only screens?)
 - Make the whole thing look prettier ✅
 - Info about what the temperature means ✅
+- Celsius support/toggle ✅
