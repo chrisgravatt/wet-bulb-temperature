@@ -1,14 +1,17 @@
 <script>
 import { LOW_TEMP_BOUNDARY, MEDIUM_TEMP_BOUNDARY, HIGH_TEMP_BOUNDARY } from '@/constants';
 import axios from 'axios';
+import { useTemperatureUnitStore } from '@/store/app.js';
 
 export default {
+
   data() {
     return {
       items: [],
       citiesAndLatLon: [],
       selectedCity: '',
-      wetBulbTemp: null,
+      wetBulbTempF: null,
+      wetBulbTempC: null,
       lowTempBoumdary: LOW_TEMP_BOUNDARY,
       mediumTempBoundary: MEDIUM_TEMP_BOUNDARY,
       highTempBoumdary: HIGH_TEMP_BOUNDARY,
@@ -17,16 +20,21 @@ export default {
   computed: {
     // change the background color based on the hazard level of the wet bulb temperature
     bgColor() {
-      if (this.wetBulbTemp < LOW_TEMP_BOUNDARY) {
+      if (this.wetBulbTempF < LOW_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #00bfff 69%, #fcff9f)';
-      } else if (this.wetBulbTemp >= LOW_TEMP_BOUNDARY && this.wetBulbTemp < MEDIUM_TEMP_BOUNDARY) {
+      } else if (this.wetBulbTempF >= LOW_TEMP_BOUNDARY && this.wetBulbTempF < MEDIUM_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #14cc14 69%, #fcff9f)';
-      } else if (this.wetBulbTemp >= MEDIUM_TEMP_BOUNDARY && this.wetBulbTemp < HIGH_TEMP_BOUNDARY) {
+      } else if (this.wetBulbTempF >= MEDIUM_TEMP_BOUNDARY && this.wetBulbTempF < HIGH_TEMP_BOUNDARY) {
         return 'linear-gradient(to bottom, #ff8c00 69%, #fcff9f)';
       } else {
         return 'linear-gradient(to bottom, #ff0000 69%, #fcff9f)';
       }
-    }
+    },
+    // get the temperature unit from the store
+    temperatureUnit() {
+      const temperatureUnitStore = useTemperatureUnitStore();
+      return temperatureUnitStore.getUnit;
+    },
   },
   methods: {
     searchCities(event) {
@@ -98,36 +106,37 @@ export default {
         },
       })
       .then(response => {
-        const { temp_f, humidity } = response.data.current;
+        const { temp_f, temp_c, humidity } = response.data.current;
         console.log(`Temperature: ${temp_f}°F`);
+        console.log(`Temperature: ${temp_c}°C`);
         console.log(`Humidity: ${humidity}%`);
         // the big kahuna!!
-        this.wetBulbTemp = this.getWetBulbTemp(temp_f, humidity)
-        console.log(`the wet bulb temp is ${this.wetBulbTemp}`)
+        this.wetBulbTempC = this.getWetBulbTemp(temp_c, humidity)
+        this.wetBulbTempF = Math.round((this.wetBulbTempC * 9 / 5) + 32);
+        console.log(`the wet bulb temp in F is ${this.wetBulbTempF}`)
+        console.log(`the wet bulb temp in C is ${this.wetBulbTempC}`)
       })
       .catch(error => {
         console.error(error);
       });
     },
     // Get the Wet Bulb Temperature using the Stull formula // right now I think it's inaccurate but we can adjust it later
-    getWetBulbTemp(temp_f, humidity) {
-      // Convert temperature from Fahrenheit to Celsius
-      const tempC = (temp_f - 32) * 5 / 9;
+    getWetBulbTemp(temp_c, humidity) {
       
       // Calculate saturation vapor pressure
-      const svp = 6.112 * Math.exp((17.67 * tempC) / (tempC + 243.5));
+      const svp = 6.112 * Math.exp((17.67 * temp_c) / (temp_c + 243.5));
       
       // Calculate vapor pressure
       const vp = svp * humidity / 100;
       
       // Set initial values for wet bulb temperature
-      let twc = tempC;
+      let twc = temp_c;
       let twcNew = 0;
       let iterationCount = 0;
       
       // Iterate until convergence is reached (or 100 iterations)
       do {
-        twcNew = (tempC * Math.atan(0.151977 * Math.pow(vp + 8.313659, 0.5)) +
+        twcNew = (temp_c * Math.atan(0.151977 * Math.pow(vp + 8.313659, 0.5)) +
                   Math.atan(twc + vp) -
                   Math.atan(vp - 1.676331) +
                   0.00391838 * Math.pow(vp, 1.5) * Math.atan(0.023101 * vp) -
@@ -142,7 +151,7 @@ export default {
       } while (true);
       
       // Convert wet bulb temperature from Celsius to Fahrenheit.
-      return Math.round((twcNew * 9 / 5) + 32);
+      return Math.round(twcNew)
     }
   },
 };
@@ -154,23 +163,29 @@ export default {
       <v-responsive class="d-flex align-center text-center justify-center fill-height">
 
         <!-- Display wetBulbTemp as text only -->
-        <div v-if="wetBulbTemp" class="d-flex align-center mb-8 justify-center">
-          <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTemp }}</div>
-          <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
-        </div>
+        <div v-if=wetBulbTempF>
+          <div v-if="temperatureUnit === 'fahrenheit'" class="d-flex align-center mb-8 justify-center">
+            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempF }}</div>
+            <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
+          </div>
 
+          <div v-if="temperatureUnit === 'celsius'" class="d-flex align-center mb-8 justify-center">
+            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempC }}</div>
+            <div class="font-weight-bold text-h1" style="color: white">&deg;C</div>
+          </div>
+        </div>
         <!-- Blurb about what the wet bulb temperature means -->
-        <div v-if="wetBulbTemp" class="d-flex text-h6 align-center mb-12 justify-center" style="color: white">
-          <template v-if="wetBulbTemp < lowTempBoumdary">
+        <div v-if="wetBulbTempF" class="d-flex text-h6 align-center mb-12 justify-center" style="color: white">
+          <template v-if="wetBulbTempF < lowTempBoumdary">
             There is no risk of heat stress at this temperature
           </template>
-          <template v-else-if="wetBulbTemp >= lowTempBoumdary && wetBulbTemp < mediumTempBoundary">
+          <template v-else-if="wetBulbTempF >= lowTempBoumdary && wetBulbTempF < mediumTempBoundary">
             The wet bulb temperature is at a comfortable level
           </template>
-          <template v-else-if="wetBulbTemp >= mediumTempBoundary && wetBulbTemp < highTempBoumdary">
+          <template v-else-if="wetBulbTempF >= mediumTempBoundary && wetBulbTempF < highTempBoumdary">
             There is a high risk of heat stress at this temperature
           </template>
-          <template v-else-if="wetBulbTemp >= highTempBoumdary">
+          <template v-else-if="wetBulbTempF >= highTempBoumdary">
             At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately
           </template>
           <template v-else>
