@@ -1,6 +1,7 @@
 <script>
 import { LOW_TEMP_BOUNDARY, MEDIUM_TEMP_BOUNDARY, HIGH_TEMP_BOUNDARY } from '@/constants';
 import axios from 'axios';
+import { useTemperatureUnitStore } from '@/store/app.js';
 
 export default {
 
@@ -28,7 +29,12 @@ export default {
       } else {
         return 'linear-gradient(to bottom, #ff0000 69%, #fcff9f)';
       }
-    }
+    },
+    // get the temperature unit from the store
+    temperatureUnit() {
+      const temperatureUnitStore = useTemperatureUnitStore();
+      return temperatureUnitStore.getUnit;
+    },
   },
   methods: {
     searchCities(event) {
@@ -157,11 +163,17 @@ export default {
       <v-responsive class="d-flex align-center text-center justify-center fill-height">
 
         <!-- Display wetBulbTemp as text only -->
-        <div v-if="wetBulbTempF" class="d-flex align-center mb-8 justify-center">
-          <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempF }}</div>
-          <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
-        </div>
+        <div v-if=wetBulbTempF>
+          <div v-if="temperatureUnit === 'fahrenheit'" class="d-flex align-center mb-8 justify-center">
+            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempF }}</div>
+            <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
+          </div>
 
+          <div v-if="temperatureUnit === 'celsius'" class="d-flex align-center mb-8 justify-center">
+            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempC }}</div>
+            <div class="font-weight-bold text-h1" style="color: white">&deg;C</div>
+          </div>
+        </div>
         <!-- Blurb about what the wet bulb temperature means -->
         <div v-if="wetBulbTempF" class="d-flex text-h6 align-center mb-12 justify-center" style="color: white">
           <template v-if="wetBulbTempF < lowTempBoumdary">

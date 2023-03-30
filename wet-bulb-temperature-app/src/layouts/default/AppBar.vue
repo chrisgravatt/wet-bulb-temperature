@@ -5,14 +5,37 @@
       Find Your Local Wet Bulb Temperature
     </v-app-bar-title>
     <template v-slot:append>
-      <v-btn icon="mdi-temperature-celsius"></v-btn>
-      <v-btn icon="mdi-temperature-fahrenheit"></v-btn>
+      <v-btn icon="mdi-temperature-celsius" @click="changeTemperatureUnit('celsius')"></v-btn>
+      <v-btn icon="mdi-temperature-fahrenheit" @click="changeTemperatureUnit('fahrenheit')"></v-btn>
     </template>
   </v-app-bar>
 </template>
 
-<script setup>
-  //
+<script>
+  import { computed } from 'vue';
+  import { useTemperatureUnitStore } from '@/store/app.js';
+
+  export default {
+    setup() {
+      const temperatureUnitStore = useTemperatureUnitStore();
+
+      const temperatureUnit = computed({
+        get: () => temperatureUnitStore.unit,
+        set: (value) => temperatureUnitStore.setUnit(value),
+      });
+
+      const changeTemperatureUnit = (unit) => {
+        temperatureUnit.value = unit;
+        console.log(`temp unit has been set to ${temperatureUnit.value}`)
+      }
+
+      return {
+        temperatureUnit,
+        changeTemperatureUnit,
+      };
+    },
+  };
+
 </script>
 
 <style>
