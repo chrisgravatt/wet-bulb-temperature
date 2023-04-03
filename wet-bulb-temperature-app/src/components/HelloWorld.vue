@@ -158,9 +158,9 @@ export default {
 </script>
 
 <template>
-  <v-app :style="{ background: bgColor }">
-    <v-container class="fill-height">
-      <v-responsive class="d-flex align-center text-center justify-center fill-height">
+  <v-app :style="{ background: bgColor, 'background-attachment': 'fixed', 'overflow-y': 'hidden', 'overscroll-behavior-y': 'none'}">
+    <v-container class="fill-height" :style="{ 'overflow-y': 'hidden', 'overscroll-behavior-y': 'none' }">
+      <v-responsive class="d-flex align-center text-center justify-center fill-height" :style="{ 'overflow-y': 'scroll' }">
 
         <!-- Display wetBulbTemp as text only -->
         <div v-if=wetBulbTempF>
