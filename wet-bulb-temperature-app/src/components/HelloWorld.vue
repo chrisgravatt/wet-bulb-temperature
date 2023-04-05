@@ -152,33 +152,33 @@ export default {
 
         <!-- Display wetBulbTemp as text only -->
         <div v-if=wetBulbTempF>
-          <div v-if="temperatureUnit === 'fahrenheit'" class="d-flex align-center mb-8 justify-center">
-            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempF }}</div>
-            <div class="font-weight-bold text-h1" style="color: white">&deg;F</div>
+          <div v-if="temperatureUnit === 'fahrenheit'" class="d-flex align-center justify-center">
+            <div class="temperature-display" style="color: white">{{ wetBulbTempF }}</div>
+            <div class="temperature-display" style="color: white">&deg;F</div>
           </div>
 
-          <div v-if="temperatureUnit === 'celsius'" class="d-flex align-center mb-8 justify-center">
-            <div class="font-weight-bold text-h1" style="color: white">{{ wetBulbTempC }}</div>
-            <div class="font-weight-bold text-h1" style="color: white">&deg;C</div>
+          <div v-if="temperatureUnit === 'celsius'" class="d-flex align-center justify-center">
+            <div class="temperature-display" style="color: white">{{ wetBulbTempC }}</div>
+            <div class="temperature-display" style="color: white">&deg;C</div>
           </div>
         </div>
         <!-- Blurb about what the wet bulb temperature means -->
-        <div v-if="wetBulbTempF" class="d-flex text-h6 align-center mb-12 justify-center" style="color: white">
-          <template v-if="wetBulbTempF < lowTempBoumdary">
+        <div v-if="wetBulbTempF" class="d-flex text-h6 align-center mb-12 justify-center blurb" style="color: white">
+          <div v-if="wetBulbTempF < lowTempBoumdary" class="blurb">
             There is no risk of heat stress at this temperature
-          </template>
-          <template v-else-if="wetBulbTempF >= lowTempBoumdary && wetBulbTempF < mediumTempBoundary">
+          </div>
+          <div v-else-if="wetBulbTempF >= lowTempBoumdary && wetBulbTempF < mediumTempBoundary" class="blurb">
             The wet bulb temperature is at a comfortable level
-          </template>
-          <template v-else-if="wetBulbTempF >= mediumTempBoundary && wetBulbTempF < highTempBoumdary">
+          </div>
+          <div v-else-if="wetBulbTempF >= mediumTempBoundary && wetBulbTempF < highTempBoumdary" class="blurb">
             There is a high risk of heat stress at this temperature
-          </template>
-          <template v-else-if="wetBulbTempF >= highTempBoumdary">
+          </div>
+          <div v-else-if="wetBulbTempF >= highTempBoumdary" class="blurb">
             At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately
-          </template>
-          <template v-else>
+          </div>
+          <div v-else>
             No text
-          </template>
+          </div>
         </div>
 
         <!-- Autocomplete text box -->
@@ -198,6 +198,7 @@ export default {
             no-filter
             close-on-click
             autofocus
+            variant="solo"
           ></v-autocomplete>
         </v-row>
 
@@ -208,15 +209,29 @@ export default {
 
 <style>
   .my-autocomplete {
-    max-width: 450px;
+    max-width: 600px !important;
     justify-content: center;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+  }
+
+  .temperature-display {
+    font-weight: bold;
+    font-size: clamp(4rem, 20svw, 7rem);
+  }
+
+  .blurb {
+    font-size: clamp(1.1rem, 3.6svw, 1.5rem);
+    margin-bottom: 75px;
   }
 
   .v-list {
-    backdrop-filter: blur(20px) !important;
-    background-color: rgba(37, 37, 37, 0.2) !important;
+    background-color: rgba(0, 0, 0, 0.15) !important;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.25) !important;
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-color: white !important;
+    border-style: solid !important;
+    border-width: 0.5px !important;
+    border-radius: 5px !important;
   }
 
   .v-list-item {
@@ -224,11 +239,21 @@ export default {
   }
 
   .v-autocomplete {
-    /* border-color: white;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 20px; */
     color: white;
+    opacity: 100%;
+    margin-bottom: 100px;
+  }
+
+  .v-field {
+    color: rgb(39, 39, 39) !important;
+    border-color: black !important;
+    border-style: solid !important;
+    border-width: 0.5px !important;
+    border-radius: 15px !important;
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    font-size: clamp(0.7rem, 3.5svw, 1rem) !important;
+    /* height: clamp(3rem, 13svw, 3.5rem) !important; */
+    text-align: center !important;
   }
 
 </style>
