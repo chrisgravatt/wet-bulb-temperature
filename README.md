@@ -15,11 +15,11 @@ Fixed Bugs:
 
 - ✅ When the page is first navigated to, the search bar text "Enter your location" is already panned away. Fix this so that it begins in the center of the search bar. 
 - ✅ On mobile, users are unable to "hit enter" or otherwise make a selection in the dropdown
+- ✅ Border goes around entire search bar with a "lip" instead of just around the search bar
 
 Bugs to fix:
 
 - Bug Fix: when a user wants to type "SAO PAULO" in the dropdown and types "SAO" it shows Sao Paulo, but if they continue to type: "SAO PA" then Sao Paulo is removed from the dropdown. This only happens for some entries whereas typing "RICHMOND" will still show Richmond, VA at the top of the list. 
-- Bug Fix: Border goes around entire search bar with a "lip" instead of just around the search bar (app currently uses default styling while I figure this out)
 
 Future Features List:
 
