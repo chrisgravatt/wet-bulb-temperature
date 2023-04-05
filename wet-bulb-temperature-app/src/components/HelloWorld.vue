@@ -51,7 +51,6 @@ export default {
         })
         .then(response => {
           // Extract the city names from the API response
-          console.log(response.data);
           const citiesAndLatLon = response.data.features.map(feature => {
             const { formatted, lat, lon } = feature.properties;
             return {
@@ -66,7 +65,6 @@ export default {
 
           // Set the city names as the autocomplete items
           this.items = citiesAndLatLon.map(city => city.formattedCity);
-          console.log(`the items are ${this.items}`)
         })
         .catch(error => {
           console.error(error);
@@ -78,7 +76,6 @@ export default {
       }
 
       const selectedCityName = this.selectedCity;
-      console.log(`Selected city: ${selectedCityName}`);
 
       // Find the city object in citiesAndLatLon that matches the selected city name
       const selectedCity = this.citiesAndLatLon.find(city => city.formattedCity === selectedCityName);
@@ -90,10 +87,6 @@ export default {
 
       // Extract the lat and lon from the selected city object
       const { lat, lon } = selectedCity;
-
-      console.log(`Selected city: ${selectedCityName}`);
-      console.log(`Latitude: ${lat}`);
-      console.log(`Longitude: ${lon}`);
 
       // Use the lat/lon to make another API call to a weather API here
       const API_KEY = '263099b102ec4a5bb11191701231603';
@@ -107,14 +100,9 @@ export default {
       })
       .then(response => {
         const { temp_f, temp_c, humidity } = response.data.current;
-        console.log(`Temperature: ${temp_f}°F`);
-        console.log(`Temperature: ${temp_c}°C`);
-        console.log(`Humidity: ${humidity}%`);
         // the big kahuna!!
         this.wetBulbTempC = this.getWetBulbTemp(temp_c, humidity)
         this.wetBulbTempF = Math.round((this.wetBulbTempC * 9 / 5) + 32);
-        console.log(`the wet bulb temp in F is ${this.wetBulbTempF}`)
-        console.log(`the wet bulb temp in C is ${this.wetBulbTempC}`)
       })
       .catch(error => {
         console.error(error);
@@ -158,9 +146,9 @@ export default {
 </script>
 
 <template>
-  <v-app :style="{ background: bgColor }">
-    <v-container class="fill-height">
-      <v-responsive class="d-flex align-center text-center justify-center fill-height">
+  <v-app :style="{ background: bgColor, 'background-attachment': 'fixed', 'overflow-y': 'hidden', 'overscroll-behavior-y': 'none'}">
+    <v-container class="fill-height" :style="{ 'overflow-y': 'hidden', 'overscroll-behavior-y': 'none' }">
+      <v-responsive class="d-flex align-center text-center justify-center fill-height" :style="{ 'overflow-y': 'scroll' }">
 
         <!-- Display wetBulbTemp as text only -->
         <div v-if=wetBulbTempF>
@@ -220,7 +208,7 @@ export default {
 
 <style>
   .my-autocomplete {
-    max-width: 340px;
+    max-width: 450px;
     justify-content: center;
   }
 

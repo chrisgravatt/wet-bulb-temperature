@@ -17,3 +17,20 @@ export const useTemperatureUnitStore = defineStore({
     },
   },
 });
+
+export const useDynamicBackgroundStore = defineStore({
+  id: 'dynamicBackground',
+  state: () => ({
+    backgroundColor: 'linear-gradient(to bottom, #00bfff 69%, #fcff9f)',
+  }),
+  actions: {
+    setBackgroundColor(color) {
+      this.backgroundColor = color
+    },
+  },
+  getters: {
+    getBackgroundColor() {
+      return this.backgroundColor;
+    },
+  },
+})
