@@ -5,6 +5,8 @@
       Find Your Local Wet Bulb Temperature
     </v-app-bar-title>
     <template v-slot:append>
+      <v-btn @click="$router.push('/')">Home</v-btn>
+      <v-btn @click="$router.push('/learnmore')">Learn More</v-btn>
       <v-btn icon="mdi-temperature-celsius" @click="changeTemperatureUnit('celsius')"></v-btn>
       <v-btn icon="mdi-temperature-fahrenheit" @click="changeTemperatureUnit('fahrenheit')"></v-btn>
     </template>

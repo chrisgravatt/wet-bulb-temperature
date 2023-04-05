@@ -22,9 +22,10 @@ Bugs to fix:
 
 Future Features List:
 
-- About page that has info about the accuracy of the temp, Stull formula, etc. Links to official org guidlines
+- About page that has info about the accuracy of the temp, Stull formula, etc. Links to official org guidlines, disclaimer, Affiliate Links to physical Wet Bulb Thermometers 
 - Toggle/selection of guidlines from various organizations 
 - Hide app bar text on smaller mobile screens
-- Make app bar thinner (possibly on mobile only screens?)
+- Make elements smaller on smaller mobile screens (app bar, search bar, text, etc)
+- Add more interesting background shapes/elements
 - Automatically set the temperature unit to Celsius when selecting a location outside the US 😏
 
