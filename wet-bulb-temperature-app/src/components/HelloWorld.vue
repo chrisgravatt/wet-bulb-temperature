@@ -222,8 +222,7 @@ export default {
 
   .blurb {
     font-size: clamp(1.1rem, 3.6svw, 1.5rem);
-    text-shadow: rgb(211, 211, 211) 1px 0 1px;
-    margin-bottom: 100px;
+    margin-bottom: 75px;
   }
 
   .v-list {
