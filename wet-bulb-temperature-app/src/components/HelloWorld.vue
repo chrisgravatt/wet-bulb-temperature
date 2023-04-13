@@ -99,7 +99,10 @@ export default {
         },
       })
       .then(response => {
-        const { temp_f, temp_c, humidity } = response.data.current;
+        const { temp_c, humidity } = response.data.current;
+        console.log(`the temperature is ${temp_c}`)
+        console.log(`the humidity is ${humidity}`)
+
         // the big kahuna!!
         this.wetBulbTempC = this.getWetBulbTemp(temp_c, humidity)
         this.wetBulbTempF = Math.round((this.wetBulbTempC * 9 / 5) + 32);
@@ -108,38 +111,13 @@ export default {
         console.error(error);
       });
     },
-    // Get the Wet Bulb Temperature using the Stull formula // right now I think it's inaccurate but we can adjust it later
     getWetBulbTemp(temp_c, humidity) {
-      
-      // Calculate saturation vapor pressure
-      const svp = 6.112 * Math.exp((17.67 * temp_c) / (temp_c + 243.5));
-      
-      // Calculate vapor pressure
-      const vp = svp * humidity / 100;
-      
-      // Set initial values for wet bulb temperature
-      let twc = temp_c;
-      let twcNew = 0;
-      let iterationCount = 0;
-      
-      // Iterate until convergence is reached (or 100 iterations)
-      do {
-        twcNew = (temp_c * Math.atan(0.151977 * Math.pow(vp + 8.313659, 0.5)) +
-                  Math.atan(twc + vp) -
-                  Math.atan(vp - 1.676331) +
-                  0.00391838 * Math.pow(vp, 1.5) * Math.atan(0.023101 * vp) -
-                  4.686035);
-        
-        if (Math.abs(twcNew - twc) < 0.001 || iterationCount > 100) {
-          break;
-        }
-        
-        twc = twcNew;
-        iterationCount++;
-      } while (true);
-      
-      // Convert wet bulb temperature from Celsius to Fahrenheit.
-      return Math.round(twcNew)
+      const T = temp_c
+      const H = humidity
+
+      const wet_bulb_temp = T * Math.atan(0.151977 * Math.pow(H + 8.313659, 0.5)) + Math.atan(T + H) - Math.atan(H - 1.676331) + 0.00391838 * Math.pow(H, 1.5) * Math.atan(0.023101 * H) - 4.686035;
+
+      return Math.round(wet_bulb_temp);
     }
   },
 };
