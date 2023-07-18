@@ -143,16 +143,16 @@ export default {
         <!-- Blurb about what the wet bulb temperature means -->
         <div v-if="wetBulbTempF" class="d-flex text-h6 align-center mb-12 justify-center blurb" style="color: white">
           <div v-if="wetBulbTempF < lowTempBoumdary" class="blurb">
-            There is no risk of heat stress at this temperature
+            All activities allowed, but be alert for heat-related illness in prolonged events
           </div>
           <div v-else-if="wetBulbTempF >= lowTempBoumdary && wetBulbTempF < mediumTempBoundary" class="blurb">
-            The wet bulb temperature is at a comfortable level
+            Enforce longer rest periods in the shade and drinking every 15 minutes
           </div>
           <div v-else-if="wetBulbTempF >= mediumTempBoundary && wetBulbTempF < highTempBoumdary" class="blurb">
-            There is a high risk of heat stress at this temperature
+            Non-athletes, unacclimatized athletes, and any other high risk persons should cease outdoor activities
           </div>
           <div v-else-if="wetBulbTempF >= highTempBoumdary" class="blurb">
-            At this temperature your body is no longer able to cool itself via sweating. Take shelter immediately
+            Cancel all athletic activites
           </div>
           <div v-else>
             No text
